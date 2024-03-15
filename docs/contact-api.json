@@ -16,7 +16,7 @@
                 "description": "Create new contact",
                 "parameters": [
                     {
-                        "name": "Authorization",
+                        "name": "AccessToken",
                         "in": "header"
                     }
                 ],
@@ -86,7 +86,7 @@
                 "description": "Search contact",
                 "parameters": [
                     {
-                        "name": "Authorization",
+                        "name": "AccessToken",
                         "in": "header"
                     },
                     {
@@ -160,7 +160,7 @@
                 "description": "Update contact",
                 "parameters": [
                     {
-                        "name": "Authorization",
+                        "name": "AccessToken",
                         "in": "header"
                     },
                     {
@@ -234,7 +234,7 @@
                 "description": "Get contact",
                 "parameters": [
                     {
-                        "name": "Authorization",
+                        "name": "AccessToken",
                         "in": "header"
                     },
                     {
@@ -284,7 +284,7 @@
                 "description": "Remove contact",
                 "parameters": [
                     {
-                        "name": "Authorization",
+                        "name": "AccessToken",
                         "in": "header"
                     },
                     {

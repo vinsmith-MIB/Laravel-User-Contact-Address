@@ -17,7 +17,7 @@ class ApiAuthMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token = $request->header('Authorization');
+        $token = $request->header('AccessToken');
         $authenticate = true;
 
         if (!$token) {
@@ -25,6 +25,7 @@ class ApiAuthMiddleware
         }
 
         $user = User::where('token', $token)->first();
+        
         if (!$user) {
             $authenticate = false;
         } else {

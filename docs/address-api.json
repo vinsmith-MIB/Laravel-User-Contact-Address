@@ -16,7 +16,7 @@
                 "description": "Create new address",
                 "parameters": [
                     {
-                        "name": "Authorization",
+                        "name": "AccessToken",
                         "in": "header"
                     },
                     {
@@ -96,7 +96,7 @@
                 "description": "Get list addresses",
                 "parameters": [
                     {
-                        "name": "Authorization",
+                        "name": "AccessToken",
                         "in": "header"
                     },
                     {
@@ -154,7 +154,7 @@
                 "description": "Get address",
                 "parameters": [
                     {
-                        "name": "Authorization",
+                        "name": "AccessToken",
                         "in": "header"
                     },
                     {
@@ -211,7 +211,7 @@
                 "description": "Update address",
                 "parameters": [
                     {
-                        "name": "Authorization",
+                        "name": "AccessToken",
                         "in": "header"
                     },
                     {
@@ -295,7 +295,7 @@
                 "description": "Delete address",
                 "parameters": [
                     {
-                        "name": "Authorization",
+                        "name": "AccessToken",
                         "in": "header"
                     },
                     {

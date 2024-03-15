@@ -1,6 +1,6 @@
 {
     "openapi": "3.0.3",
-    "info": {
+    "info":{
         "title": "User API",
         "description": "User API",
         "version": "1.0.0"
@@ -11,37 +11,33 @@
         }
     ],
     "paths": {
-        "/api/users": {
-            "post": {
-                "description": "Register new user",
-                "requestBody": {
+        "/api/users":{
+            "post":{
+                "description": "Register User",
+                "requestBody":{
                     "content": {
-                        "application/json": {
+                        "application/json":{
                             "examples": {
-                                "khannedy": {
-                                    "description": "Register user khannedy",
-                                    "value": {
-                                        "username": "khannedy",
-                                        "password": "rahasia",
-                                        "name": "Eko Kurniawan Khannedy"
+                                "laila":{
+                                    "description": "Register User laila",
+                                    "value":{
+                                        "username":"laila",
+                                        "password":"rahasia",
+                                        "name":"laila mamamam"
                                     }
                                 }
                             },
-                            "schema": {
+                            "schema":{
                                 "type": "object",
-                                "required": [
-                                    "name",
-                                    "password",
-                                    "username"
-                                ],
+                                "required": ["username","password","name"],
                                 "properties": {
-                                    "username": {
+                                    "username":{
                                         "type": "string"
                                     },
-                                    "password": {
+                                    "password":{
                                         "type": "string"
                                     },
-                                    "name": {
+                                    "name":{
                                         "type": "string"
                                     }
                                 }
@@ -50,22 +46,22 @@
                     }
                 },
                 "responses": {
-                    "400": {
-                        "description": "Validation error",
+                    "400":{
+                        "description": "Validasi User Error",
                         "content": {
-                            "application/json": {
+                            "application/json":{
                                 "examples": {
-                                    "validationerror": {
-                                        "description": "Validation error",
-                                        "value": {
-                                            "errors": {
-                                                "username": [
-                                                    "username must not be blank",
-                                                    "username min 6 characters"
+                                    "validationerror":{
+                                        "description": "Validasi Error",
+                                        "value":{
+                                            "errors":{
+                                                "username":[
+                                                    "username tidak boleh kosong",
+                                                    "usename min 6 karakter"
                                                 ],
-                                                "name": [
-                                                    "username must not be blank",
-                                                    "username min 6 characters"
+                                                "name":[
+                                                    "name tidak boleh kosong",
+                                                    "name min 6 karakter"
                                                 ]
                                             }
                                         }
@@ -74,40 +70,40 @@
                             }
                         }
                     },
-                    "201": {
-                        "description": "Success register user",
+                    "201":{
+                        "description": "suksess Register User",
                         "content": {
-                            "application/json": {
+                            "application/json":{
                                 "examples": {
-                                    "success": {
-                                        "description": "Success register user",
-                                        "value": {
-                                            "data": {
-                                                "id": 1,
-                                                "name": "Eko Kurniawan Khannedy",
-                                                "username": "khannedy"
+                                    "success":{
+                                        "description": "Suksess Register User",
+                                        "value":{
+                                            "data":{
+                                                "id":1,
+                                                "name":"laila mamamaam",
+                                                "username":"laila"
                                             }
                                         }
                                     }
                                 },
-                                "schema": {
+                                "schema":{
                                     "type": "object",
                                     "properties": {
-                                        "data": {
+                                        "data":{
                                             "type": "object",
                                             "properties": {
-                                                "id": {
-                                                    "type": "number"
+                                                "id":{
+                                                    "type": "integer"
                                                 },
-                                                "username": {
+                                                "username":{
                                                     "type": "string"
                                                 },
-                                                "name": {
+                                                "name":{
                                                     "type": "string"
                                                 }
                                             }
                                         },
-                                        "errors": {
+                                        "errors":{
                                             "type": "object"
                                         }
                                     }
@@ -118,19 +114,19 @@
                 }
             }
         },
-        "/api/users/login": {
-            "post": {
-                "description": "Login user",
-                "requestBody": {
+        "/api/users/login":{
+            "post":{
+                "description": "Login User",
+                "requestBody":{
                     "content": {
-                        "application/json": {
-                            "schema": {
+                        "application/json":{
+                            "schema":{
                                 "type": "object",
                                 "properties": {
-                                    "username": {
+                                    "usename":{
                                         "type": "string"
                                     },
-                                    "password": {
+                                    "password":{
                                         "type": "string"
                                     }
                                 }
@@ -139,31 +135,31 @@
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "Success login",
+                    "200":{
+                        "description": "success login",
                         "content": {
-                            "application/json": {
-                                "schema": {
+                            "application/json":{
+                                "schema":{
                                     "type": "object",
                                     "properties": {
-                                        "data": {
+                                        "data":{
                                             "type": "object",
                                             "properties": {
-                                                "id": {
-                                                    "type": "number"
+                                                "id":{
+                                                    "type": "integer"
                                                 },
-                                                "username": {
+                                                "username":{
                                                     "type": "string"
                                                 },
-                                                "name": {
+                                                "name":{
                                                     "type": "string"
                                                 },
-                                                "token": {
+                                                "token":{
                                                     "type": "string"
                                                 }
                                             }
                                         },
-                                        "errors": {
+                                        "errors":{
                                             "type": "object"
                                         }
                                     }
@@ -172,40 +168,40 @@
                         }
                     }
                 }
-            }
+        }
         },
-        "/api/users/current": {
-            "get": {
-                "description": "Get current user",
+        "/api/users/current":{
+            "get":{
+                "description": "Get User saat ini",
                 "parameters": [
                     {
-                        "name": "Authorization",
+                        "name": "AccessToken",
                         "in": "header"
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "Success get current user",
+                    "200":{
+                        "description": "Suksess Get User saat ini",
                         "content": {
-                            "application/json": {
-                                "schema": {
+                            "application/json":{
+                                "schema":{
                                     "type": "object",
                                     "properties": {
-                                        "data": {
+                                        "data":{
                                             "type": "object",
                                             "properties": {
-                                                "id": {
-                                                    "type": "number"
+                                                "id":{
+                                                    "type": "integer"
                                                 },
-                                                "username": {
+                                                "username":{
                                                     "type": "string"
                                                 },
-                                                "name": {
+                                                "name":{
                                                     "type": "string"
                                                 }
                                             }
                                         },
-                                        "errors": {
+                                        "errors":{
                                             "type": "object"
                                         }
                                     }
@@ -215,25 +211,25 @@
                     }
                 }
             },
-            "patch": {
-                "description": "Update current user",
+            "patch":{
+                "description": "Update User",
                 "parameters": [
                     {
-                        "name": "Authorization",
+                        "name": "AccessToken",
                         "in": "header"
                     }
                 ],
-                "requestBody": {
-                    "description": "Update current user",
+                "requestBody":{
+                    "description": "Update User",
                     "content": {
-                        "application/json": {
-                            "schema": {
+                        "application/json":{
+                            "schema":{
                                 "type": "object",
                                 "properties": {
-                                    "name": {
+                                    "name":{
                                         "type": "string"
                                     },
-                                    "password": {
+                                    "password":{
                                         "type": "string"
                                     }
                                 }
@@ -242,28 +238,28 @@
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "Success update user",
+                    "200":{
+                        "description": "Suksess update User saat ini",
                         "content": {
-                            "application/json": {
-                                "schema": {
+                            "application/json":{
+                                "schema":{
                                     "type": "object",
                                     "properties": {
-                                        "data": {
+                                        "data":{
                                             "type": "object",
                                             "properties": {
-                                                "id": {
-                                                    "type": "number"
+                                                "id":{
+                                                    "type": "integer"
                                                 },
-                                                "username": {
+                                                "username":{
                                                     "type": "string"
                                                 },
-                                                "name": {
+                                                "name":{
                                                     "type": "string"
                                                 }
                                             }
                                         },
-                                        "errors": {
+                                        "errors":{
                                             "type": "object"
                                         }
                                     }
@@ -274,27 +270,28 @@
                 }
             }
         },
-        "/api/users/logout": {
-            "delete": {
-                "description": "Logout current user",
+        "/api/users/logout":{
+            "delete":{
+                "description": "Logout User",
                 "parameters": [
                     {
-                        "name": "Authorization",
+                        "name": "AccessToken",
                         "in": "header"
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "Success logout user",
+                    "200":{
+                        "description": "Suksess logout User saat ini",
                         "content": {
-                            "application/json": {
-                                "schema": {
+                            "application/json":{
+                                "schema":{
                                     "type": "object",
                                     "properties": {
-                                        "data": {
+                                        "data":{
                                             "type": "boolean"
+
                                         },
-                                        "errors": {
+                                        "errors":{
                                             "type": "object"
                                         }
                                     }

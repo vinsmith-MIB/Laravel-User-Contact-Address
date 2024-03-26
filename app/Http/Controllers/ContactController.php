@@ -77,6 +77,7 @@ class ContactController extends Controller
         }
 
         $contact = $user->contacts()->findOrFail($id);
+        $addresses = $contact->addresses()->delete();
         $contact->delete();
 
         return redirect()->route('get.contact')->with('success', 'Contact deleted successfully.');

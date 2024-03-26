@@ -50,7 +50,8 @@ class ContactController extends Controller
         }
 
         $contact = $user->contacts()->findOrFail($id);
-        return view('updateContact', compact('contact'));
+        $contacts = $user->contacts()->paginate(5);
+        return view('updateContact', compact('contact', 'contacts'));
     }
 
     public function updateContact(ContactUpdateRequest $request, $id)

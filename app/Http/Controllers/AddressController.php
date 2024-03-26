@@ -66,8 +66,11 @@ class AddressController extends Controller
         }
 
         $contact = $user->contacts()->findOrFail($idContact);
+        $addresses = $contact->addresses()->paginate(5);
         $address = $contact->addresses()->findOrFail($idAddress);
-        return view('addresses.update', compact('address', 'idContact'));
+        
+        $totalAddresses = $contact->addresses()->count();
+        return view('addresses.update', compact('address', 'idContact', 'totalAddresses', 'addresses'));
     }
 
     public function update(int $idContact, int $idAddress, AddressUpdateRequest $request)

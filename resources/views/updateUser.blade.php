@@ -19,7 +19,7 @@
                         <div class="col-12">
                             <div class="mb-5">
                                 <h2 class="h3">Update </h2>
-                                <h3 class="fs-6 fw-normal text-secondary m-0">Enter your details to register</h3>
+                                <h3 class="fs-6 fw-normal text-secondary m-0">Enter your details to update</h3>
                             </div>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                             <label for="name">Name</label>
                             <input type="text" class="form-control" id="name" name="name" value="{{ Auth::user()->name }}">
                         </div>
-                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                        <button type="submit" class="btn btn-primary mt-3">Update Profile</button>
                     </form>
                 </div>
             </div>

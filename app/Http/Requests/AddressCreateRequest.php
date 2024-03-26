@@ -27,7 +27,7 @@ class AddressCreateRequest extends FormRequest
             "street" => ['nullable', 'max:200'],
             "city" => ['nullable', 'max:100'],
             "province" => ['nullable', 'max:100'],
-            "country" => ['required', 'max:100'],
+            "country" => ['nullable', 'max:100'],
             "postal_code" => ['nullable', 'max:10'],
         ];
     }

@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-class UserController extends Controller
+class UserControllerApi extends Controller
 {
     public function register(UserRegisterRequest $request): JsonResponse
     {
@@ -80,14 +80,12 @@ class UserController extends Controller
             $user->password = Hash::make($data['password']);
         }
 
-        $user->save();
         return new UserResource($user);
     }
 
     public function logout(Request $request): JsonResponse {
         $user = Auth::user();
         $user->token = null;
-        $user->save();
 
         return response()->json([
             "data" => true

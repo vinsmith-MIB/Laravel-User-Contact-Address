@@ -27,7 +27,7 @@ class AddressTest extends TestCase
                 'postal_code' => '213123',
             ],
             [
-                'Authorization' => 'test'
+                'AccessToken' => 'test'
             ]
         )->assertStatus(201)
             ->assertJson([
@@ -55,7 +55,7 @@ class AddressTest extends TestCase
                 'postal_code' => '213123',
             ],
             [
-                'Authorization' => 'test'
+                'AccessToken' => 'test'
             ]
         )->assertStatus(400)
             ->assertJson([
@@ -79,7 +79,7 @@ class AddressTest extends TestCase
                 'postal_code' => '213123',
             ],
             [
-                'Authorization' => 'test'
+                'AccessToken' => 'test'
             ]
         )->assertStatus(404)
             ->assertJson([
@@ -95,7 +95,7 @@ class AddressTest extends TestCase
         $address = Address::query()->limit(1)->first();
 
         $this->get('/api/contacts/' . $address->contact_id . '/addresses/' . $address->id, [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])->assertStatus(200)
             ->assertJson([
                 'data' => [
@@ -114,7 +114,7 @@ class AddressTest extends TestCase
         $address = Address::query()->limit(1)->first();
 
         $this->get('/api/contacts/' . $address->contact_id . '/addresses/' . ($address->id + 1), [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])->assertStatus(404)
             ->assertJson([
                 'errors' => [
@@ -137,7 +137,7 @@ class AddressTest extends TestCase
                 'postal_code' => '22222'
             ],
             [
-                'Authorization' => 'test'
+                'AccessToken' => 'test'
             ]
         )->assertStatus(200)
             ->assertJson([
@@ -166,7 +166,7 @@ class AddressTest extends TestCase
                 'postal_code' => '22222'
             ],
             [
-                'Authorization' => 'test'
+                'AccessToken' => 'test'
             ]
         )->assertStatus(400)
             ->assertJson([
@@ -190,7 +190,7 @@ class AddressTest extends TestCase
                 'postal_code' => '22222'
             ],
             [
-                'Authorization' => 'test'
+                'AccessToken' => 'test'
             ]
         )->assertStatus(404)
             ->assertJson([
@@ -209,7 +209,7 @@ class AddressTest extends TestCase
             [
             ],
             [
-                'Authorization' => 'test'
+                'AccessToken' => 'test'
             ]
         )->assertStatus(200)
             ->assertJson([
@@ -227,7 +227,7 @@ class AddressTest extends TestCase
             [
             ],
             [
-                'Authorization' => 'test'
+                'AccessToken' => 'test'
             ]
         )->assertStatus(404)
             ->assertJson([
@@ -244,7 +244,7 @@ class AddressTest extends TestCase
 
         $this->get('/api/contacts/' . $contact->id . '/addresses',
             [
-                'Authorization' => 'test'
+                'AccessToken' => 'test'
             ]
         )->assertStatus(200)
             ->assertJson([
@@ -267,7 +267,7 @@ class AddressTest extends TestCase
 
         $this->get('/api/contacts/' . ($contact->id + 1) . '/addresses',
             [
-                'Authorization' => 'test'
+                'AccessToken' => 'test'
             ]
         )->assertStatus(404)
             ->assertJson([

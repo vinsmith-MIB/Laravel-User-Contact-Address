@@ -4,119 +4,80 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ContactCreateRequest;
 use App\Http\Requests\ContactUpdateRequest;
-use App\Http\Resources\ContactCollection;
-use App\Http\Resources\ContactResource;
-use App\Models\Contact;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ContactController extends Controller
 {
-    public function create(ContactCreateRequest $request): JsonResponse
+    public function createContact(ContactCreateRequest $request)
     {
         $data = $request->validated();
         $user = Auth::user();
 
-        $contact = new Contact($data);
-        $contact->user_id = $user->id;
-        $contact->save();
-
-        return (new ContactResource($contact))->response()->setStatusCode(201);
-    }
-
-    public function get(int $id): ContactResource
-    {
-        $user = Auth::user();
-        $contact = Contact::where('id', $id)->where('user_id', $user->id)->first();
-        if (!$contact) {
-            throw new HttpResponseException(response()->json([
-                'errors' => [
-                    "message" => [
-                        "not found"
-                    ]
-                ]
-            ])->setStatusCode(404));
+        if (!$user instanceof \Illuminate\Database\Eloquent\Model) {
+            return back()->with('error', 'User not found or not an Eloquent model instance.');
         }
 
-        return new ContactResource($contact);
+        $contact = $user->contacts()->create($data);
+        return back()->with('success', 'Contact created successfully.');
     }
 
-    public function update(int $id, ContactUpdateRequest $request): ContactResource
+    public function get(Request $request)
     {
         $user = Auth::user();
 
-        $contact = Contact::where('id', $id)->where('user_id', $user->id)->first();
-        if (!$contact) {
-            throw new HttpResponseException(response()->json([
-                'errors' => [
-                    "message" => [
-                        "not found"
-                    ]
-                ]
-            ])->setStatusCode(404));
+        if (!$user instanceof \Illuminate\Database\Eloquent\Model) {
+            return back()->with('error', 'User not found or not an Eloquent model instance.');
         }
 
-        $data = $request->validated();
-        $contact->fill($data);
-        $contact->save();
+        $search = $request->input('search');
+        $contacts = $user->contacts()
+            ->when($search, function ($query) use ($search) {
+                $query->where('first_name', 'like', '%' . $search . '%')
+                    ->orWhere('last_name', 'like', '%' . $search . '%');
+            })
+            ->paginate(5);
 
-        return new ContactResource($contact);
+        return view('contact', compact('contacts'));
     }
 
-    public function delete(int $id): JsonResponse
+    public function editContact($id)
     {
         $user = Auth::user();
 
-        $contact = Contact::where('id', $id)->where('user_id', $user->id)->first();
-        if (!$contact) {
-            throw new HttpResponseException(response()->json([
-                'errors' => [
-                    "message" => [
-                        "not found"
-                    ]
-                ]
-            ])->setStatusCode(404));
+        if (!$user instanceof \Illuminate\Database\Eloquent\Model) {
+            return back()->with('error', 'User not found or not an Eloquent model instance.');
         }
 
+        $contact = $user->contacts()->findOrFail($id);
+        return view('updateContact', compact('contact'));
+    }
+
+    public function updateContact(ContactUpdateRequest $request, $id)
+    {
+        $user = Auth::user();
+
+        if (!$user instanceof \Illuminate\Database\Eloquent\Model) {
+            return redirect()->route('get.contact')->with('error', 'User not found or not an Eloquent model instance.');
+        }
+
+        $contact = $user->contacts()->findOrFail($id);
+        $contact->update($request->validated());
+
+        return redirect()->route('get.contact')->with('success', 'Contact updated successfully.');
+    }
+
+    public function deleteContact($id)
+    {
+        $user = Auth::user();
+
+        if (!$user instanceof \Illuminate\Database\Eloquent\Model) {
+            return redirect()->route('get.contact')->with('error', 'User not found or not an Eloquent model instance.');
+        }
+
+        $contact = $user->contacts()->findOrFail($id);
         $contact->delete();
-        return response()->json([
-            'data' => true
-        ])->setStatusCode(200);
-    }
 
-    public function search(Request $request): ContactCollection
-    {
-        $user = Auth::user();
-        $page = $request->input('page', 1);
-        $size = $request->input('size', 10);
-
-        $contacts = Contact::query()->where('user_id', $user->id);
-
-        $contacts = $contacts->where(function (Builder $builder) use ($request) {
-            $name = $request->input('name');
-            if ($name) {
-                $builder->where(function (Builder $builder) use ($name) {
-                    $builder->orWhere('first_name', 'like', '%' . $name . '%');
-                    $builder->orWhere('last_name', 'like', '%' . $name . '%');
-                });
-            }
-
-            $email = $request->input('email');
-            if ($email) {
-                $builder->where('email', 'like', '%' . $email . '%');
-            }
-
-            $phone = $request->input('phone');
-            if ($phone) {
-                $builder->where('phone', 'like', '%' . $phone . '%');
-            }
-        });
-
-        $contacts = $contacts->paginate(perPage: $size, page: $page);
-
-        return new ContactCollection($contacts);
+        return redirect()->route('get.contact')->with('success', 'Contact deleted successfully.');
     }
 }

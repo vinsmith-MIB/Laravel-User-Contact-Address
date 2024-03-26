@@ -4,101 +4,98 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddressCreateRequest;
 use App\Http\Requests\AddressUpdateRequest;
-use App\Http\Resources\AddressResource;
-use App\Http\Resources\ContactResource;
-use App\Models\Address;
-use App\Models\Contact;
-use App\Models\User;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AddressController extends Controller
 {
+    public function index(int $idContact, Request $request)
+{
+    $user = Auth::user();
+    if (!$user instanceof \Illuminate\Database\Eloquent\Model) {
+        return back()->with('error', 'User not found or not an Eloquent model instance.');
+    }
 
-    private function getContact(User $user, int $idContact): Contact
+    $contact = $user->contacts()->findOrFail($idContact);
+    $search = $request->input('search');
+    $addresses = $contact->addresses()
+        ->when($search, function ($query) use ($search) {
+            $query->where('street', 'like', '%' . $search . '%')
+                ->orWhere('city', 'like', '%' . $search . '%')
+                ->orWhere('province', 'like', '%' . $search . '%')
+                ->orWhere('country', 'like', '%' . $search . '%')
+                ->orWhere('postal_code', 'like', '%' . $search . '%');
+        })
+        ->paginate(5);
+    $totalAddresses = $addresses->total();
+
+    return view('Addresses.create', compact('addresses', 'idContact', 'totalAddresses', 'search'));
+}
+
+    
+    public function create(int $idContact)
     {
-        $contact = Contact::where('user_id', $user->id)->where('id', $idContact)->first();
-        if (!$contact) {
-            throw new HttpResponseException(response()->json([
-                'errors' => [
-                    "message" => [
-                        "not found"
-                    ]
-                ]
-            ])->setStatusCode(404));
+        $user = Auth::user();
+        if (!$user instanceof \Illuminate\Database\Eloquent\Model) {
+            return back()->with('error', 'User not found or not an Eloquent model instance.');
         }
-        return $contact;
+
+        $contact = $user->contacts()->findOrFail($idContact);
+        return view('Addresses.create', compact('idContact'));
     }
 
-    private function getAddress(Contact $contact, int $idAddress): Address
+    public function store(int $idContact, AddressCreateRequest $request)
     {
-        $address = Address::where('contact_id', $contact->id)->where('id', $idAddress)->first();
-        if (!$address) {
-            throw new HttpResponseException(response()->json([
-                'errors' => [
-                    "message" => [
-                        "not found"
-                    ]
-                ]
-            ])->setStatusCode(404));
+        $user = Auth::user();
+        if (!$user instanceof \Illuminate\Database\Eloquent\Model) {
+            return back()->with('error', 'User not found or not an Eloquent model instance.');
         }
-        return $address;
-    }
 
-    public function create(int $idContact, AddressCreateRequest $request): JsonResponse
-    {
-        $user = Auth::user();
-        $contact = $this->getContact($user, $idContact);
-
+        $contact = $user->contacts()->findOrFail($idContact);
         $data = $request->validated();
-        $address = new Address($data);
-        $address->contact_id = $contact->id;
-        $address->save();
+        $address = $contact->addresses()->create($data);
 
-        return (new AddressResource($address))->response()->setStatusCode(201);
+        return redirect()->route('addresses.index', ['idContact' => $contact->id])->with('success', 'Address created successfully');
     }
 
-    public function get(int $idContact, int $idAddress): AddressResource
+    public function edit(int $idContact, int $idAddress)
     {
         $user = Auth::user();
-        $contact = $this->getContact($user, $idContact);
-        $address = $this->getAddress($contact, $idAddress);
+        if (!$user instanceof \Illuminate\Database\Eloquent\Model) {
+            return back()->with('error', 'User not found or not an Eloquent model instance.');
+        }
 
-        return new AddressResource($address);
+        $contact = $user->contacts()->findOrFail($idContact);
+        $address = $contact->addresses()->findOrFail($idAddress);
+        return view('addresses.update', compact('address', 'idContact'));
     }
 
-    public function update(int $idContact, int $idAddress, AddressUpdateRequest $request): AddressResource
+    public function update(int $idContact, int $idAddress, AddressUpdateRequest $request)
     {
         $user = Auth::user();
-        $contact = $this->getContact($user, $idContact);
-        $address = $this->getAddress($contact, $idAddress);
+        if (!$user instanceof \Illuminate\Database\Eloquent\Model) {
+            return redirect()->route('addresses.index', ['idContact' => $idContact])->with('error', 'User not found or not an Eloquent model instance.');
+        }
 
+        $contact = $user->contacts()->findOrFail($idContact);
+        $address = $contact->addresses()->findOrFail($idAddress);
         $data = $request->validated();
-        $address->fill($data);
-        $address->save();
+        $address->update($data);
 
-        return new AddressResource($address);
+        return redirect()->route('addresses.index', ['idContact' => $contact->id])->with('success', 'Address updated successfully');
     }
 
-    public function delete(int $idContact, int $idAddress): JsonResponse
+    public function destroy(int $idContact, int $idAddress)
     {
         $user = Auth::user();
-        $contact = $this->getContact($user, $idContact);
-        $address = $this->getAddress($contact, $idAddress);
+        if (!$user instanceof \Illuminate\Database\Eloquent\Model) {
+            return redirect()->route('addresses.index', ['idContact' => $idContact])->with('error', 'User not found or not an Eloquent model instance.');
+        }
+
+        $contact = $user->contacts()->findOrFail($idContact);
+        $address = $contact->addresses()->findOrFail($idAddress);
         $address->delete();
 
-        return response()->json([
-            'data' => true
-        ])->setStatusCode(200);
-    }
-
-    public function list(int $idContact): JsonResponse
-    {
-        $user = Auth::user();
-        $contact = $this->getContact($user, $idContact);
-        $addresses = Address::where('contact_id', $contact->id)->get();
-        return (AddressResource::collection($addresses))->response()->setStatusCode(200);
+        return redirect()->route('addresses.index', ['idContact' => $contact->id])->with('success', 'Address deleted successfully');
     }
 }

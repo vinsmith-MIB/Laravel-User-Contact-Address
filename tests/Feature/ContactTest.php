@@ -23,7 +23,7 @@ class ContactTest extends TestCase
             'email' => 'eko@pzn.com',
             'phone' => '03242343243'
         ], [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])->assertStatus(201)
             ->assertJson([
                 'data' => [
@@ -46,7 +46,7 @@ class ContactTest extends TestCase
             'email' => 'eko',
             'phone' => '03242343243'
         ], [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])->assertStatus(400)
             ->assertJson([
                 'errors' => [
@@ -54,7 +54,7 @@ class ContactTest extends TestCase
                         'The first name field is required.'
                     ],
                     'email' => [
-                        'The email field must be a valid email address.'
+                        'The email must be a valid email address.'
                     ]
                 ]
             ]);
@@ -70,7 +70,7 @@ class ContactTest extends TestCase
             'email' => 'eko',
             'phone' => '03242343243'
         ], [
-            'Authorization' => 'salah'
+            'AccessToken' => 'salah'
         ])->assertStatus(401)
             ->assertJson([
                 'errors' => [
@@ -87,7 +87,7 @@ class ContactTest extends TestCase
         $contact = Contact::query()->limit(1)->first();
 
         $this->get('/api/contacts/' . $contact->id, [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])->assertStatus(200)
             ->assertJson([
                 'data' => [
@@ -105,7 +105,7 @@ class ContactTest extends TestCase
         $contact = Contact::query()->limit(1)->first();
 
         $this->get('/api/contacts/' . ($contact->id + 1), [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])->assertStatus(404)
             ->assertJson([
                 'errors' => [
@@ -122,7 +122,7 @@ class ContactTest extends TestCase
         $contact = Contact::query()->limit(1)->first();
 
         $this->get('/api/contacts/' . $contact->id, [
-            'Authorization' => 'test2'
+            'AccessToken' => 'test2'
         ])->assertStatus(404)
             ->assertJson([
                 'errors' => [
@@ -145,7 +145,7 @@ class ContactTest extends TestCase
             'email' => 'test2@pzn.com',
             'phone' => '1111112',
         ], [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])->assertStatus(200)
             ->assertJson([
                 'data' => [
@@ -169,7 +169,7 @@ class ContactTest extends TestCase
             'email' => 'test2@pzn.com',
             'phone' => '1111112',
         ], [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])->assertStatus(400)
             ->assertJson([
                 'errors' => [
@@ -187,7 +187,7 @@ class ContactTest extends TestCase
         $contact = Contact::query()->limit(1)->first();
 
         $this->delete('/api/contacts/' . $contact->id, [], [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])->assertStatus(200)
             ->assertJson([
                 'data' => true
@@ -201,7 +201,7 @@ class ContactTest extends TestCase
         $contact = Contact::query()->limit(1)->first();
 
         $this->delete('/api/contacts/' . ($contact->id + 1), [], [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])->assertStatus(404)
             ->assertJson([
                 'errors' => [
@@ -217,7 +217,7 @@ class ContactTest extends TestCase
         $this->seed([UserSeeder::class, SearchSeeder::class]);
 
         $response = $this->get('/api/contacts?name=first', [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])
             ->assertStatus(200)
             ->json();
@@ -233,7 +233,7 @@ class ContactTest extends TestCase
         $this->seed([UserSeeder::class, SearchSeeder::class]);
 
         $response = $this->get('/api/contacts?name=last', [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])
             ->assertStatus(200)
             ->json();
@@ -249,7 +249,7 @@ class ContactTest extends TestCase
         $this->seed([UserSeeder::class, SearchSeeder::class]);
 
         $response = $this->get('/api/contacts?email=test', [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])
             ->assertStatus(200)
             ->json();
@@ -265,7 +265,7 @@ class ContactTest extends TestCase
         $this->seed([UserSeeder::class, SearchSeeder::class]);
 
         $response = $this->get('/api/contacts?phone=11111', [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])
             ->assertStatus(200)
             ->json();
@@ -281,7 +281,7 @@ class ContactTest extends TestCase
         $this->seed([UserSeeder::class, SearchSeeder::class]);
 
         $response = $this->get('/api/contacts?name=tidakada', [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])
             ->assertStatus(200)
             ->json();
@@ -297,7 +297,7 @@ class ContactTest extends TestCase
         $this->seed([UserSeeder::class, SearchSeeder::class]);
 
         $response = $this->get('/api/contacts?size=5&page=2', [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])
             ->assertStatus(200)
             ->json();

@@ -118,7 +118,7 @@ class UserTest extends TestCase
         $this->seed([UserSeeder::class]);
 
         $this->get('/api/users/current', [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])->assertStatus(200)
             ->assertJson([
                 'data' => [
@@ -149,7 +149,7 @@ class UserTest extends TestCase
         $this->seed([UserSeeder::class]);
 
         $this->get('/api/users/current', [
-            'Authorization' => 'salah'
+            'AccessToken' => 'salah'
         ])->assertStatus(401)
             ->assertJson([
                 'errors' => [
@@ -171,7 +171,7 @@ class UserTest extends TestCase
                 'password' => 'baru'
             ],
             [
-                'Authorization' => 'test'
+                'AccessToken' => 'test'
             ]
         )->assertStatus(200)
             ->assertJson([
@@ -195,7 +195,7 @@ class UserTest extends TestCase
                 'name' => 'Eko'
             ],
             [
-                'Authorization' => 'test'
+                'AccessToken' => 'test'
             ]
         )->assertStatus(200)
             ->assertJson([
@@ -218,13 +218,13 @@ class UserTest extends TestCase
                 'name' => 'EkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEkoEko'
             ],
             [
-                'Authorization' => 'test'
+                'AccessToken' => 'test'
             ]
         )->assertStatus(400)
             ->assertJson([
                 'errors' => [
                     'name' => [
-                        "The name field must not be greater than 100 characters."
+                        "The name must not be greater than 100 characters."
                     ]
                 ]
             ]);
@@ -235,7 +235,7 @@ class UserTest extends TestCase
         $this->seed([UserSeeder::class]);
 
         $this->delete(uri: '/api/users/logout', headers: [
-            'Authorization' => 'test'
+            'AccessToken' => 'test'
         ])->assertStatus(200)
             ->assertJson([
                 "data" => true
@@ -251,7 +251,7 @@ class UserTest extends TestCase
         $this->seed([UserSeeder::class]);
 
         $this->delete(uri: '/api/users/logout', headers: [
-            'Authorization' => 'salah'
+            'AccessToken' => 'salah'
         ])->assertStatus(401)
             ->assertJson([
                 "errors" => [

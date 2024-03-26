@@ -138,7 +138,7 @@ $totalContacts = Contact::where('user_id', $user->id)->count();
         <div class="container">
             <div class="collapse navbar-collapse d-flex align-items-center justify-content-between" id="navbarSupportedContent">
                 <a href="{{ route('updateView')}}"><i class="fa fa-regular fa-circle-user"></i></a>
-                <form class="w-50" action="{{ route('get.contact') }}" method="POST">
+                <form class="w-50" action="{{ route('get.contact') }}" method="GET">
                     @csrf
                     <div class="input-group">
                         <input type="text" class="form-control" name="search" placeholder="Search by name...">
